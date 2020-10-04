@@ -1,10 +1,19 @@
 import {MongooseModule, Prop, Schema, SchemaFactory} from '@nestjs/mongoose';
-import {Document} from 'mongoose';
+import {Document, Types} from 'mongoose';
 import * as mongoose from 'mongoose';
 import * as crypto from 'crypto';
 
+
 @Schema()
-export class User extends Document{
+export class UserModel extends Document{
+    @Prop()
+    _id: Types.ObjectId;
+
+    @Prop({
+        get: () => this._id.toString()
+    })
+    id: string;
+
     @Prop({
         default: 0
     })
@@ -81,7 +90,7 @@ export class User extends Document{
 
 }
 
-const UserSchema = SchemaFactory.createForClass(User);
+const UserSchema = SchemaFactory.createForClass(UserModel);
 
 export const userSchemaModule = MongooseModule.forFeatureAsync([{
     name: 'User',

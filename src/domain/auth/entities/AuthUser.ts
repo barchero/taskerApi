@@ -1,6 +1,8 @@
 import {RolesEnum} from '../enums/RolesEnum';
 
 export class AuthUser {
+    id: string = '';
+    username: string = '';
     firstName: string = '';
     lastName: string = '';
     displayName?: string;

@@ -2,7 +2,7 @@ import {MongooseModule, Prop, Schema, SchemaFactory} from '@nestjs/mongoose';
 import {Document} from 'mongoose';
 
 @Schema()
-export class Notifications extends Document{
+export class NotificationsModel extends Document{
     @Prop({
         default: '',
         unique: false
@@ -36,7 +36,7 @@ export class Notifications extends Document{
 
 }
 
-const NotificationsSchema = SchemaFactory.createForClass(Notifications);
+const NotificationsSchema = SchemaFactory.createForClass(NotificationsModel);
 
 export const notificationsSchemaModule = MongooseModule.forFeature([{
     name: 'Notifications',

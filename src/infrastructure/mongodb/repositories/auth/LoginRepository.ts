@@ -1,28 +1,38 @@
 import {LoginRepository} from '../../../../domain/auth/repositories/LoginRepository';
-import {AuthUser} from '../../../../domain/auth/entities/AuthUser';
-import {Model} from 'mongoose';
-import {User} from '../../schemas/User';
+import {Model, Schema} from 'mongoose';
+import {UserModel} from '../../schemas/UserModel';
+import {User} from '../../../../domain/auth/entities/User';
+import * as mongoose from 'mongoose';
 
 export class LoginRepositoryImpl extends LoginRepository {
     
-    constructor(private userModel: Model<User>){
+    constructor(private userModel: Model<UserModel>){
         super();
     }
     
-    async findUserByUsername(username: string): Promise<AuthUser> {
-        return new Promise<AuthUser>((success, error) => {
-            this.userModel.findOne({username: username}, (err, res) => {
+    async findUserByLogInUser(loginData): Promise<User> {
+        const {username, password} = loginData;
+        return new Promise<User>((success, error) => {
+            this.userModel.findOne({username, password}, (err, res) => {
                 if(err){
                     error(err);
                 } else {
-                    success(this.mapUserToAuthUser(res));
+                    success(Object.assign(new User(), res.toObject()));
                 }
             });
         })
     }
 
-    mapUserToAuthUser({firstName, lastName, displayName, email, roles, updated, created}: User): AuthUser {
-        return Object.assign(new AuthUser(), {firstName, lastName, displayName, email, roles, updated, created});
+    async findUserById(id: string): Promise<User> {
+        return new Promise<User>((success, error) => {
+            this.userModel.findOne({_id: new mongoose.Types.ObjectId(id)}, (err, res) => {
+                if(err){
+                    error(err);
+                } else {
+                    success(Object.assign(new User(), res.toObject()));
+                }
+            })
+        })
     }
 
 }

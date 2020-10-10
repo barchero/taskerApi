@@ -1,18 +1,16 @@
 import { Module } from '@nestjs/common';
 import {AuthController} from '../controllers/auth.controller';
 import {AuthService} from '../services/auth.service';
-import {userSchemaModule} from '../../../infrastructure/mongodb/schemas/UserModel';
-import {notificationsSchemaModule} from '../../../infrastructure/mongodb/schemas/NotificationsModel';
 import {PassportModule} from '@nestjs/passport';
 import {JwtModule} from '@nestjs/jwt';
 import {Config} from '../../../Config';
 import {LocalStrategy} from '../strategies/local';
 import {JwtStrategy} from '../strategies/jwt';
+import {MongooseModule} from '../../../infrastructure/mongodb/mongooseModule';
 
 @Module({
     imports: [
-        userSchemaModule,
-        notificationsSchemaModule,
+        MongooseModule,
         PassportModule,
         JwtModule.register({
             secret: Config.JWT_SECRET,

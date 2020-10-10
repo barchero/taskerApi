@@ -5,11 +5,11 @@ import {AuthUser} from '../../../domain/auth/entities/AuthUser';
 import {UserModel} from '../../../infrastructure/mongodb/schemas/UserModel';
 import {User} from '../../../domain/auth/entities/User';
 
-export class LoginImpl extends Login {
+export class LoginImpl implements Login {
 
-    constructor(private loginRepository: LoginRepository){
-        super();
-    }
+    constructor(
+        private loginRepository: LoginRepository
+    ) {}
 
     private mapUserToAuthUser({_id, username, firstName, lastName, displayName, email, roles, updated, created}: User): AuthUser {
         return Object.assign(new AuthUser(),{id: _id.toString()}, {username, firstName, lastName, displayName, email, roles, updated, created});

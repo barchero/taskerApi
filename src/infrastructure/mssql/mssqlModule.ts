@@ -1,9 +1,9 @@
-import { Module } from '@nestjs/common';
+import {Module} from '@nestjs/common';
 import {TypeOrmModule, TypeOrmModuleOptions} from '@nestjs/typeorm';
 import {Config} from '../../Config';
-import {WorkOrder} from './entities/WorkOrder';
-import {Worker} from './entities/Worker';
 import {ConnectionsEnum} from './enums/ConnectionsEnum';
+import {WorkOrderImpl} from './entities/WorkOrder';
+import {WorkerImpl} from './entities/Worker';
 
 const commonParams: TypeOrmModuleOptions = {
     type: 'mssql',
@@ -11,7 +11,7 @@ const commonParams: TypeOrmModuleOptions = {
     port: Number(Config.MSSQL_PORT),
     username: Config.MSSQL_USER,
     password: Config.MSSQL_PASS
-}
+};
 
 @Module({
     imports: [
@@ -19,7 +19,7 @@ const commonParams: TypeOrmModuleOptions = {
             ...commonParams,
             name: ConnectionsEnum.DATABASE_SERVE0PM,
             database: Config.MSSQL_DATABASE_SERVE0PM,
-            entities: [WorkOrder],
+            entities: [WorkOrderImpl],
             synchronize: true,
         }),
 
@@ -27,7 +27,7 @@ const commonParams: TypeOrmModuleOptions = {
             ...commonParams,
             name: ConnectionsEnum.DATABASE_GROUP0001,
             database: Config.MSSQL_DATABASE_GRUP0001,
-            entities: [Worker],
+            entities: [WorkerImpl],
             synchronize: true,
         }),
 
@@ -40,4 +40,5 @@ const commonParams: TypeOrmModuleOptions = {
         }),
     ],
 })
-export class MssqlModule {}
+export class MssqlModule {
+}

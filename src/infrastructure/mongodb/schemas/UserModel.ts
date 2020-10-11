@@ -1,11 +1,11 @@
 import {MongooseModule, Prop, Schema, SchemaFactory} from '@nestjs/mongoose';
-import {Document, Types} from 'mongoose';
 import * as mongoose from 'mongoose';
+import {Document, Types} from 'mongoose';
 import * as crypto from 'crypto';
 
 
 @Schema()
-export class UserModel extends Document{
+export class UserModel extends Document {
     @Prop()
     _id: Types.ObjectId;
 
@@ -95,15 +95,15 @@ const UserSchema = SchemaFactory.createForClass(UserModel);
 export const userSchemaModule = MongooseModule.forFeatureAsync([{
     name: 'User',
     useFactory: () => {
-        const schema = UserSchema
-        schema.pre('save', (next) =>{
+        const schema = UserSchema;
+        schema.pre('save', (next) => {
             if (this.password && this.password.length > 6) {
                 this.salt = new Buffer(crypto.randomBytes(16).toString('base64'), 'base64');
                 this.password = this.hashPassword(this.password);
             }
 
             next();
-        })
+        });
         schema.methods = {
             hashPassword: (password) => {
                 if (this.salt && password) {
@@ -113,7 +113,7 @@ export const userSchemaModule = MongooseModule.forFeatureAsync([{
                 }
             },
             authenticate: (password) => this.password === this.hashPassword(password)
-        }
+        };
         schema.statics = {
             findUniqueUsername: (username, suffix, callback) => {
                 const possibleUsername = username + (suffix || '');
@@ -135,5 +135,5 @@ export const userSchemaModule = MongooseModule.forFeatureAsync([{
         };
         return schema;
     }
-}])
+}]);
 

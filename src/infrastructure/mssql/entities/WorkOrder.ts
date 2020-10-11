@@ -1,11 +1,12 @@
 import {Column, Entity, PrimaryColumn} from 'typeorm';
 import {Config} from '../../../Config';
+import {WorkOrder} from '@domain/workOrders/entities/WorkOrder';
 
 @Entity({
     name: 'ordres',
     database: Config.MSSQL_DATABASE_SERVE0PM
 })
-export class WorkOrder{
+export class WorkOrderImpl extends WorkOrder {
     @PrimaryColumn({
         name: 'codigo',
         type: 'char',

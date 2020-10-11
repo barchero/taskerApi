@@ -4,8 +4,8 @@ export class WorkOrder {
     clientNumber: string;
     clientName: string;
     deliveryDate: Date;
-    startWorker: Worker;
-    endWorker: Worker;
+    startWorker: string;
+    endWorker: string;
     startDate: Date;
     endDate: Date;
     serial: string;

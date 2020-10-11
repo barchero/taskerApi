@@ -5,7 +5,8 @@ import {JwtGuard} from '../guards/jwt';
 
 @Controller('auth')
 export class AuthController {
-    constructor(private readonly authService: AuthService) {}
+    constructor(private readonly authService: AuthService) {
+    }
 
     @UseGuards(LocalGuard)
     @Post('login')
@@ -15,7 +16,7 @@ export class AuthController {
 
     @UseGuards(JwtGuard)
     @Get('profile')
-    async user(@Request() req){
+    async user(@Request() req) {
         return this.authService.getLoggedUser(req.user.id);
     }
 

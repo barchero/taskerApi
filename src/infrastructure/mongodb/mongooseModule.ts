@@ -10,9 +10,10 @@ import {notificationsSchemaModule} from './schemas/NotificationsModel';
         userSchemaModule,
         notificationsSchemaModule
     ],
-    exports:[
+    exports: [
         userSchemaModule,
         notificationsSchemaModule
     ]
 })
-export class MongooseModule {}
+export class MongooseModule {
+}

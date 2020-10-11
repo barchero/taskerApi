@@ -1,11 +1,12 @@
-import {Entity, Column, PrimaryColumn} from 'typeorm';
+import {Column, Entity, PrimaryColumn} from 'typeorm';
 import {Config} from '../../../Config';
+import {Worker} from '@domain/workOrders/entities/Worker';
 
 @Entity({
     name: 'tecnicos',
     database: Config.MSSQL_DATABASE_GRUP0001
 })
-export class Worker {
+export class WorkerImpl extends Worker {
     @PrimaryColumn({
         name: 'CODIGO',
         type: 'char',

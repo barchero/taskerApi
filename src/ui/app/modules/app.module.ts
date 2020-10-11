@@ -1,11 +1,12 @@
 import {Module} from '@nestjs/common';
-import {AuthModule} from '../../auth/modules/auth.module';
-import {WorkOrdersModule} from '../../workOrders/modules/workOrders.module';
+import {AuthModule} from '@ui/auth/modules/auth.module';
+import {WorkOrdersModule} from '@ui/workOrders/modules/workOrders.module';
 
 @Module({
-  imports: [
-    AuthModule,
-    WorkOrdersModule
-  ]
+    imports: [
+        AuthModule,
+        WorkOrdersModule
+    ]
 })
-export class AppModule {}
+export class AppModule {
+}

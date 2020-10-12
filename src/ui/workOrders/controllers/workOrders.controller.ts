@@ -14,6 +14,12 @@ export class WorkOrdersController {
     }
 
     @UseGuards(JwtGuard)
+    @Get('list/open')
+    async listOpen() {
+        return this.workOrdersService.listOpenWorkOrders();
+    }
+
+    @UseGuards(JwtGuard)
     @Get('detail/:id')
     async detail(@Param() params){
         const id = params.id;

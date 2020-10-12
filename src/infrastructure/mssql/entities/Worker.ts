@@ -1,6 +1,6 @@
 import {Column, Entity, PrimaryColumn} from 'typeorm';
-import {Config} from '../../../Config';
 import {Worker} from '@domain/workOrders/entities/Worker';
+import {Config} from '../../../Config';
 
 @Entity({
     name: 'tecnicos',

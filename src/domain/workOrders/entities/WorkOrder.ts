@@ -1,11 +1,16 @@
+import {Client} from '@domain/workOrders/entities/Client';
+import {Worker} from '@domain/workOrders/entities/Worker';
+
 export class WorkOrder {
     id: string;
     done: boolean;
-    clientNumber: string;
-    clientName: string;
+    clientCode: string;
+    client: Client;
     deliveryDate: Date;
-    startWorker: string;
-    endWorker: string;
+    startWorkerCode: string;
+    startWorker: Worker;
+    endWorkerCode: string;
+    endWorker: Worker;
     startDate: Date;
     endDate: Date;
     serial: string;

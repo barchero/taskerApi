@@ -1,13 +1,13 @@
-import {GetWorkOrderById} from '@domain/workOrders/use-cases/getWorkOrderById';
+import {getOpenWorkOrdersList} from '@domain/workOrders/use-cases/getOpenWorkOrdersList';
 import {WorkOrder} from '@domain/workOrders/entities/WorkOrder';
 import {WorkOrdersRepository} from '@domain/workOrders/repositories/WorkOrdersRepository';
-import {Worker} from '@domain/workOrders/entities/Worker';
+import {ShortWorkOrder} from '@domain/workOrders/entities/ShortWorkOrder';
 
-export class GetWorkOrderByIdImpl implements GetWorkOrderById{
+export class getOpenWorkOrdersListImpl implements getOpenWorkOrdersList {
 
     constructor(
         private workOrdersRepository: WorkOrdersRepository
-    ) { }
+    ) {}
 
     private trimValues(obj) {
         const _obj = Object.assign(obj);
@@ -25,9 +25,15 @@ export class GetWorkOrderByIdImpl implements GetWorkOrderById{
         return _obj;
     }
 
-    async execute(id: string): Promise<WorkOrder> {
-        const workOrder = await this.workOrdersRepository.getWorkOrderById(id);
-
-        return this.trimValues(workOrder);
+    private mapWorkOrderToShortWorkOrder({id, done, client, deliveryDate}: WorkOrder) {
+        const response = Object.assign(new ShortWorkOrder(), {id, done, deliveryDate, clientName: client?.name});
+        return this.trimValues(response);
     }
+
+
+    async execute(): Promise<WorkOrder[]> {
+        const workOrders = await this.workOrdersRepository.listOpenWorkOrders();
+        return workOrders.map(workOrder => this.mapWorkOrderToShortWorkOrder(workOrder));
+    }
+
 }

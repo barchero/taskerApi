@@ -4,6 +4,8 @@ import {Config} from '../../Config';
 import {ConnectionsEnum} from './enums/ConnectionsEnum';
 import {WorkOrderImpl} from './entities/WorkOrder';
 import {WorkerImpl} from './entities/Worker';
+import {ClientPhoneImpl} from '@infrastructure/mssql/entities/ClientPhone';
+import {ClientImpl} from '@infrastructure/mssql/entities/Client';
 
 const commonParams: TypeOrmModuleOptions = {
     type: 'mssql',
@@ -35,7 +37,7 @@ const commonParams: TypeOrmModuleOptions = {
             ...commonParams,
             name: ConnectionsEnum.DATABASE_YEARPM,
             database: Config.MSSQL_DATABASE_YEARPM,
-            entities: [],
+            entities: [ClientImpl, ClientPhoneImpl],
             synchronize: true,
         }),
     ],

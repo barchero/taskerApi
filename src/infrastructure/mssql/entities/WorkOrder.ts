@@ -1,6 +1,8 @@
 import {Column, Entity, PrimaryColumn} from 'typeorm';
-import {Config} from '../../../Config';
 import {WorkOrder} from '@domain/workOrders/entities/WorkOrder';
+import {Client} from '@domain/workOrders/entities/Client';
+import {Worker} from '@domain/workOrders/entities/Worker';
+import {Config} from '../../../Config';
 
 @Entity({
     name: 'ordres',
@@ -26,14 +28,9 @@ export class WorkOrderImpl extends WorkOrder {
         type: 'char',
         length: 8
     })
-    clientNumber: string;
+    clientCode: string;
 
-    @Column({
-        name: 'nomclient',
-        type: 'char',
-        length: 80
-    })
-    clientName: string;
+    client: Client;
 
     @Column({
         name: 'previs_ent',
@@ -46,14 +43,18 @@ export class WorkOrderImpl extends WorkOrder {
         type: 'char',
         length: 2
     })
-    startWorker: string;
+    startWorkerCode: string;
+
+    startWorker: Worker;
 
     @Column({
         name: 'csurt',
         type: 'char',
         length: 2
     })
-    endWorker: string;
+    endWorkerCode: string;
+
+    endWorker: Worker;
 
     @Column({
         name: 'dataentra',

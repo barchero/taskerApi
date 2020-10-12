@@ -24,9 +24,9 @@ export class GetWorkOrdersListImpl implements GetWorkOrdersList {
         return _obj;
     }
 
-    private mapWorkOrderToShortWorkOrder({id, done, clientName, deliveryDate}: WorkOrder) {
-        const trimedValues: Partial<WorkOrder> = this.trimValues({id, done, clientName, deliveryDate});
-        return Object.assign(new ShortWorkOrder(), trimedValues);
+    private mapWorkOrderToShortWorkOrder({id, done, client, deliveryDate}: WorkOrder) {
+        const response = Object.assign(new ShortWorkOrder(), {id, done, deliveryDate, clientName: client?.name});
+        return this.trimValues(response);
     }
 
     async execute(): Promise<ShortWorkOrder[]> {

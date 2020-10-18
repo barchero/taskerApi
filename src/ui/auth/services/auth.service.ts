@@ -9,6 +9,7 @@ import {LogInUser} from '@domain/auth/entities/LogInUser';
 import {AuthUser} from '@domain/auth/entities/AuthUser';
 import {LoginImpl} from '@application/auth/use-cases/login';
 import {LoginRepository} from '@domain/auth/repositories/LoginRepository';
+import {RolesEnum} from '@domain/auth/enums/RolesEnum';
 
 
 @Injectable()
@@ -28,8 +29,8 @@ export class AuthService {
         return loginImpl.execute(userData);
     }
 
-    async getJWT(user: AuthUser) {
-        const payload = {username: user.username, sub: user.id};
+    async getJWT({username, id, roles}: AuthUser) {
+        const payload = {username, roles, sub: id};
         return {
             access_token: this.jwtService.sign(payload)
         };

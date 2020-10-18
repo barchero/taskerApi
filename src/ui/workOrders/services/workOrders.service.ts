@@ -11,7 +11,9 @@ import {WorkerImpl} from '@infrastructure/mssql/entities/Worker';
 import {GetWorkOrderByIdImpl} from '@application/workOrders/use-cases/getWorkOrderById';
 import {ClientImpl} from '@infrastructure/mssql/entities/Client';
 import {WorkOrdersRepository} from '@domain/workOrders/repositories/WorkOrdersRepository';
-import {getOpenWorkOrdersListImpl} from '@application/workOrders/use-cases/getOpenWorkOrdersList';
+import {QueryList} from '@domain/workOrders/entities/QueryList';
+import {PaginationRepositoryImpl} from '@infrastructure/mssql/repositories/pagination/PaginationRepository';
+import {Pagination} from '@domain/pagination/entities/Pagination';
 
 
 @Injectable()
@@ -31,15 +33,12 @@ export class WorkOrdersService {
             databaseServe0pmEntityManager.getRepository(WorkOrderImpl),
             databaseGroup0001EntityManager.getRepository(WorkerImpl),
             databaseYearpmEntityManager.getRepository(ClientImpl),
+            new PaginationRepositoryImpl()
         );
     }
 
-    async listWorkOrders(): Promise<ShortWorkOrder[]> {
-        return new GetWorkOrdersListImpl(this.workOrdersRepository).execute();
-    }
-
-    async listOpenWorkOrders(): Promise<WorkOrder[]> {
-        return new getOpenWorkOrdersListImpl(this.workOrdersRepository).execute();
+    async listWorkOrders(req: QueryList): Promise<Pagination<ShortWorkOrder>> {
+        return new GetWorkOrdersListImpl(this.workOrdersRepository).execute(req);
     }
 
     async getWorkOrderById(id: string): Promise<WorkOrder> {

@@ -2,6 +2,8 @@ import {WorkOrder} from '@domain/workOrders/entities/WorkOrder';
 import {WorkOrdersRepository} from '@domain/workOrders/repositories/WorkOrdersRepository';
 import {GetWorkOrdersList} from '@domain/workOrders/use-cases/getWorkOrdersList';
 import {ShortWorkOrder} from '@domain/workOrders/entities/ShortWorkOrder';
+import {QueryList} from '@domain/workOrders/entities/QueryList';
+import {Pagination} from '@domain/pagination/entities/Pagination';
 
 export class GetWorkOrdersListImpl implements GetWorkOrdersList {
     constructor(
@@ -29,9 +31,10 @@ export class GetWorkOrdersListImpl implements GetWorkOrdersList {
         return this.trimValues(response);
     }
 
-    async execute(): Promise<ShortWorkOrder[]> {
-        const workOrders = await this.workOrdersRepository.listWorkOrders();
-        return workOrders.map(workOrder => this.mapWorkOrderToShortWorkOrder(workOrder));
+    async execute(options: QueryList): Promise<Pagination<ShortWorkOrder>> {
+        const {items, meta}: Pagination<WorkOrder> = await this.workOrdersRepository.listWorkOrders(options);
+        const shortWorkOrders: ShortWorkOrder[] = items.map(workOrder => this.mapWorkOrderToShortWorkOrder(workOrder));
+        return Promise.resolve(Object.assign(new Pagination(), {meta, items: shortWorkOrders}));
     }
 
 }

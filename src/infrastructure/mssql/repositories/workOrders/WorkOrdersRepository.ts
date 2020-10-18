@@ -3,12 +3,16 @@ import {WorkOrder} from '@domain/workOrders/entities/WorkOrder';
 import {Repository} from 'typeorm';
 import {Worker} from '@domain/workOrders/entities/Worker';
 import {Client} from '@domain/workOrders/entities/Client';
+import {PaginationRepository} from '@domain/pagination/repositories/PaginationRepository';
+import {Pagination} from '@domain/pagination/entities/Pagination';
+import {QueryList} from '@domain/workOrders/entities/QueryList';
 
 export class WorkOrdersRepositoryImpl implements WorkOrdersRepository {
     constructor(
         private workOrderRepository: Repository<WorkOrder>,
         private workerRepository: Repository<Worker>,
-        private clientRepository: Repository<Client>) {
+        private clientRepository: Repository<Client>,
+        private paginationRepository: PaginationRepository) {
     }
 
     private async setEndWorker(workOrder: WorkOrder){
@@ -38,20 +42,13 @@ export class WorkOrdersRepositoryImpl implements WorkOrdersRepository {
         return workOrder;
     }
 
-    async listOpenWorkOrders(): Promise<WorkOrder[]> {
-        const workOrders = await this.workOrderRepository.find({where: {done: false}});
+    async listWorkOrders(query: QueryList): Promise<Pagination<WorkOrder>> {
+        const workOrders = await this.paginationRepository.paginate<WorkOrder>(
+            this.workOrderRepository,
+            query
+        );
 
-        for (const workOrder of workOrders) {
-            await this.setClient(workOrder);
-        }
-
-        return workOrders;
-    }
-
-    async listWorkOrders(): Promise<WorkOrder[]> {
-        const workOrders = await this.workOrderRepository.find({take: 100});
-
-        for (const workOrder of workOrders) {
+        for (const workOrder of workOrders?.items) {
             await this.setClient(workOrder);
         }
 

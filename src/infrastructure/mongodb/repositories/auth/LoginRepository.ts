@@ -10,26 +10,30 @@ export class LoginRepositoryImpl extends LoginRepository {
         super();
     }
 
-    async findUserByLogInUser(loginData): Promise<User> {
+    async findUserByLogInUser(loginData): Promise<User | null> {
         const {username, password} = loginData;
         return new Promise<User>((success, error) => {
             this.userModel.findOne({username, password}, (err, res) => {
                 if (err) {
                     error(err);
-                } else {
+                } else if(res){
                     success(Object.assign(new User(), res.toObject()));
+                } else {
+                    success(null);
                 }
             });
         });
     }
 
-    async findUserById(id: string): Promise<User> {
+    async findUserById(id: string): Promise<User | null> {
         return new Promise<User>((success, error) => {
             this.userModel.findOne({_id: new mongoose.Types.ObjectId(id)}, (err, res) => {
                 if (err) {
                     error(err);
-                } else {
+                } else if(res){
                     success(Object.assign(new User(), res.toObject()));
+                } else {
+                    success(null);
                 }
             });
         });

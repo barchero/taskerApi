@@ -1,12 +1,14 @@
-import {Column, Entity, PrimaryColumn} from 'typeorm';
+import {Column, Entity, JoinColumn, OneToOne, PrimaryColumn} from 'typeorm';
 import {WorkOrder} from '@domain/workOrders/entities/WorkOrder';
 import {Client} from '@domain/workOrders/entities/Client';
 import {Worker} from '@domain/workOrders/entities/Worker';
 import {Config} from '../../../Config';
+import {ClientImpl} from '@infrastructure/mssql/entities/Client';
+import {WorkerImpl} from '@infrastructure/mssql/entities/Worker';
 
 @Entity({
     name: 'ordres',
-    database: Config.MSSQL_DATABASE_SERVE0PM
+    database: Config.MSSQL_DATABASE_SERVE0PM,
 })
 export class WorkOrderImpl extends WorkOrder {
     @PrimaryColumn({
@@ -23,13 +25,10 @@ export class WorkOrderImpl extends WorkOrder {
     })
     done: boolean;
 
-    @Column({
-        name: 'cliente',
-        type: 'char',
-        length: 8
+    @OneToOne(() => ClientImpl, client => client.id)
+    @JoinColumn({
+        name: 'cliente'
     })
-    clientCode: string;
-
     client: Client;
 
     @Column({
@@ -38,22 +37,16 @@ export class WorkOrderImpl extends WorkOrder {
     })
     deliveryDate: Date;
 
-    @Column({
-        name: 'centra',
-        type: 'char',
-        length: 2
+    @OneToOne(() => WorkerImpl, worker => worker.id)
+    @JoinColumn({
+        name: 'centra'
     })
-    startWorkerCode: string;
-
     startWorker: Worker;
 
-    @Column({
-        name: 'csurt',
-        type: 'char',
-        length: 2
+    @OneToOne(() => WorkerImpl, worker => worker.id)
+    @JoinColumn({
+        name: 'csurt'
     })
-    endWorkerCode: string;
-
     endWorker: Worker;
 
     @Column({

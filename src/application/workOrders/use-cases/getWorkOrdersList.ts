@@ -1,13 +1,12 @@
-import {WorkOrder} from '@domain/workOrders/entities/WorkOrder';
-import {WorkOrdersRepository} from '@domain/workOrders/repositories/WorkOrdersRepository';
-import {GetWorkOrdersList} from '@domain/workOrders/use-cases/getWorkOrdersList';
+import {GetShortWorkOrdersList} from '@domain/workOrders/use-cases/getShortWorkOrdersList';
 import {ShortWorkOrder} from '@domain/workOrders/entities/ShortWorkOrder';
 import {QueryList} from '@domain/workOrders/entities/QueryList';
 import {Pagination} from '@domain/pagination/entities/Pagination';
+import {ShortWorkOrdersRepository} from '@domain/workOrders/repositories/ShortWorkOrdersRepository';
 
-export class GetWorkOrdersListImpl implements GetWorkOrdersList {
+export class GetShortWorkOrdersListImpl implements GetShortWorkOrdersList {
     constructor(
-        private workOrdersRepository: WorkOrdersRepository
+        private shortWorkOrdersRepository: ShortWorkOrdersRepository
     ) { }
 
     private trimValues(obj) {
@@ -26,14 +25,9 @@ export class GetWorkOrdersListImpl implements GetWorkOrdersList {
         return _obj;
     }
 
-    private mapWorkOrderToShortWorkOrder({id, done, client, deliveryDate}: WorkOrder) {
-        const response = Object.assign(new ShortWorkOrder(), {id, done, deliveryDate, clientName: client?.name});
-        return this.trimValues(response);
-    }
-
-    async execute(options: QueryList): Promise<Pagination<ShortWorkOrder>> {
-        const {items, meta}: Pagination<WorkOrder> = await this.workOrdersRepository.listWorkOrders(options);
-        const shortWorkOrders: ShortWorkOrder[] = items.map(workOrder => this.mapWorkOrderToShortWorkOrder(workOrder));
+    async execute(queryList: QueryList<ShortWorkOrder>): Promise<Pagination<ShortWorkOrder>> {
+        const {items, meta}: Pagination<ShortWorkOrder> = await this.shortWorkOrdersRepository.listShortWorkOrders(queryList);
+        const shortWorkOrders: ShortWorkOrder[] = this.trimValues(items);
         return Promise.resolve(Object.assign(new Pagination(), {meta, items: shortWorkOrders}));
     }
 

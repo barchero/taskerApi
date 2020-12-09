@@ -1,6 +1,8 @@
+import {ShortClient} from '@domain/workOrders/entities/ShortClient';
+
 export class ShortWorkOrder {
     id: string;
     done: boolean;
-    clientName: string;
+    client: ShortClient;
     deliveryDate: Date;
 }

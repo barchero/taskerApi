@@ -4,6 +4,7 @@ import {JwtGuard} from '@ui/auth/guards/jwt';
 import {RolesGuard} from '@ui/auth/guards/roles';
 import {RolesEnum} from '@domain/auth/enums/RolesEnum';
 import {QueryList} from '@domain/workOrders/entities/QueryList';
+import {ShortWorkOrder} from '@domain/workOrders/entities/ShortWorkOrder';
 
 @Controller('work-orders')
 export class WorkOrdersController {
@@ -12,8 +13,8 @@ export class WorkOrdersController {
 
     @UseGuards(JwtGuard, new RolesGuard([RolesEnum.ADMIN]))
     @Post('list')
-    async list(@Body() body: QueryList) {
-        return this.workOrdersService.listWorkOrders(body);
+    async list(@Body() body: QueryList<ShortWorkOrder>) {
+        return this.workOrdersService.listShortWorkOrders(body);
     }
 
     @UseGuards(JwtGuard)
